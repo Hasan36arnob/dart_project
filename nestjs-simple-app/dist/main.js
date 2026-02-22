@@ -7,7 +7,8 @@ const path_1 = require("path");
 const app_module_1 = require("./app.module");
 async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule, new platform_fastify_1.FastifyAdapter());
-    app.useStaticAssets({
+    const fastifyInstance = app.getHttpAdapter().getInstance();
+    fastifyInstance.register(require('@fastify/static'), {
         root: (0, path_1.join)(__dirname, '..', 'public'),
         prefix: '/',
     });

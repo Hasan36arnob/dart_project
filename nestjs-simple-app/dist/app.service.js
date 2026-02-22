@@ -33,7 +33,11 @@ let AppService = class AppService {
     }
     async updateTodo(id, completed) {
         await this.todoRepository.update(id, { completed });
-        return this.todoRepository.findOne({ where: { id } });
+        const todo = await this.todoRepository.findOne({ where: { id } });
+        if (!todo) {
+            throw new Error(`Todo with id ${id} not found`);
+        }
+        return todo;
     }
     async deleteTodo(id) {
         await this.todoRepository.delete(id);

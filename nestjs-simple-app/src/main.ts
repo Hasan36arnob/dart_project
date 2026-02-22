@@ -8,8 +8,9 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, new FastifyAdapter());
   
-  // Serve static files from public directory
-  app.useStaticAssets({
+  // Serve static files from public directory using Fastify's built-in static serving
+  const fastifyInstance = app.getHttpAdapter().getInstance();
+  fastifyInstance.register(require('@fastify/static'), {
     root: join(__dirname, '..', 'public'),
     prefix: '/',
   });
