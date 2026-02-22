@@ -25,7 +25,11 @@ export class AppService {
 
   async updateTodo(id: number, completed: boolean): Promise<Todo> {
     await this.todoRepository.update(id, { completed });
-    return this.todoRepository.findOne({ where: { id } });
+    const todo = await this.todoRepository.findOne({ where: { id } });
+    if (!todo) {
+      throw new Error(`Todo with id ${id} not found`);
+    }
+    return todo;
   }
 
   async deleteTodo(id: number): Promise<void> {
