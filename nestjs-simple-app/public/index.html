@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+    <title>AngularJS + NestJS Full Stack</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .card { border: 1px solid #ddd; padding: 20px; margin: 10px 0; border-radius: 5px; }
+        button { background: #007bff; color: white; border: none; padding: 10px 15px; cursor: pointer; border-radius: 3px; }
+        button:hover { background: #0056b3; }
+    </style>
+</head>
+<body>
+    <div class="container" ng-controller="MainController">
+        <h1>AngularJS + NestJS Full Stack</h1>
+        
+        <div class="card">
+            <h2>Backend API Response:</h2>
+            <p>{{ backendMessage }}</p>
+            <button ng-click="loadFromBackend()">Load from Backend</button>
+        </div>
+
+        <div class="card">
+            <h2>Frontend Input:</h2>
+            <input type="text" ng-model="userInput" placeholder="Enter something..." />
+            <p>You typed: {{ userInput }}</p>
+        </div>
+
+        <div class="card">
+            <h2>Current Time:</h2>
+            <p>{{ currentTime | date:'medium' }}</p>
+        </div>
+    </div>
+
+    <script>
+        angular.module('myApp', [])
+        .controller('MainController', ['$scope', '$http', '$interval', function($scope, $http, $interval) {
+            $scope.backendMessage = 'Click the button to load from backend';
+            $scope.userInput = '';
+            $scope.currentTime = new Date();
+
+            // Update time every second
+            $interval(function() {
+                $scope.currentTime = new Date();
+            }, 1000);
+
+            $scope.loadFromBackend = function() {
+                $http.get('/api/hello')
+                    .then(function(response) {
+                        $scope.backendMessage = response.data;
+                    })
+                    .catch(function(error) {
+                        $scope.backendMessage = 'Error: ' + error.data;
+                    });
+            };
+        }]);
+    </script>
+</body>
+</html>
