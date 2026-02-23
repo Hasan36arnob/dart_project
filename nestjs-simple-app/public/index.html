@@ -850,6 +850,22 @@
                 URL.revokeObjectURL(url);
             };
 
+            // Update todo order in backend
+            $scope.updateTodoOrder = function() {
+                // Update order field for each todo based on current position
+                $scope.todos.forEach((todo, index) => {
+                    todo.order = index;
+                    // Update in backend
+                    $http.put('/api/todos/' + todo.id, todo)
+                        .then(function(response) {
+                            console.log('Todo order updated:', todo.title);
+                        })
+                        .catch(function(error) {
+                            console.error('Error updating todo order:', error);
+                        });
+                });
+            };
+
             // Statistics
             $scope.updateStats = function() {
                 $scope.stats.total = $scope.todos.length;
