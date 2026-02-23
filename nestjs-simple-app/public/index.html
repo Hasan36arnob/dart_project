@@ -817,7 +817,24 @@
                 e.preventDefault();
                 if (draggedItem && e.target.classList.contains('todo-item')) {
                     e.target.classList.remove('drag-over');
-                    // Implement reordering logic here
+                    
+                    // Reordering logic
+                    const todos = $scope.todos;
+                    const draggedIndex = parseInt(draggedItem.getAttribute('data-index'));
+                    const targetIndex = parseInt(e.target.getAttribute('data-index'));
+                    
+                    if (draggedIndex !== targetIndex) {
+                        // Remove dragged item from array
+                        const [draggedTodo] = todos.splice(draggedIndex, 1);
+                        // Insert at target position
+                        todos.splice(targetIndex, 0, draggedTodo);
+                        
+                        // Update UI
+                        $scope.$apply();
+                        
+                        // Update order in backend
+                        $scope.updateTodoOrder();
+                    }
                 }
             });
 
